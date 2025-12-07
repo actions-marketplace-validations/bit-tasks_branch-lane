@@ -1,9 +1,9 @@
 # Create Bit Lane for each Git Branch for CI/CD Pipelines
-For each new Branch in Git, a Bit lane is created in bit.cloud.
+For each new Branch in Git, a Bit lane is created in **bit.cloud**.
 
 # GitHub Actions
 
-This CD Task creates a Bit lane each Git Branch. Use it after creating the lane, use the `bit-tasks/commit-bitmap@v1` to update the Bitmap file.
+This task creates a Bit lane for each Git Branch. As the next step in your pipeline, use the `bit-tasks/commit-bitmap@v1` to update the `.Bitmap` file.
 
 ## Inputs
 
@@ -13,7 +13,7 @@ This CD Task creates a Bit lane each Git Branch. Use it after creating the lane,
 
 ## Example usage
 
-**Note:** Use `bit-task/init@v1` as a prior step in your action before running Bit Verify. Also, use the `bit-tasks/commit-bitmap@v1` task after creating the new lane to update the Bitmap file in the branch.
+**Note:** Use `bit-task/init@v1` as a prior step in your pipeline before running `bit-tasks/branch-lane@v1`. As the next step, use the `bit-tasks/commit-bitmap@v1` to update the `.Bitmap` file.
 
 ```yaml
 name: Test Bit Branch Lane
@@ -24,11 +24,13 @@ on:
 permissions:
   contents: write
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     env:
-      BIT_CONFIG_USER_TOKEN: ${{ secrets.BIT_CONFIG_USER_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GIT_USER_NAME: ${{ secrets.GIT_USER_NAME }}
+      GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+      BIT_CONFIG_ACCESS_TOKEN: ${{ secrets.BIT_CONFIG_ACCESS_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -58,12 +60,4 @@ git tag -a -m "action release" v1 --force
 git push --follow-tags
 ```
 
-For more information refer [Create a javascript action](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action)
-
-## GitLab CI/CD
-
-For more information refer [Specify a custom CI/CD file](https://docs.gitlab.com/ee/ci/pipelines/settings.html#specify-a-custom-cicd-configuration-file)
-
-## Azure DevOps
-
-For more information refer [Add build task](https://learn.microsoft.com/en-us/azure/devops/extend/develop/add-build-task?view=azure-devops)
+For more information, refer to [Create a javascript action](https://docs.github.com/en/actions/creating-actions/creating-a-javascript-action)
